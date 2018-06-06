@@ -13,9 +13,9 @@ Simple Django Blog
         :target: https://djcms-blog.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. image:: https://pyup.io/repos/github/CarlosMart626/djcms_blog/python-3-shield.svg?t=1528243878487
+.. image:: https://pyup.io/repos/github/CarlosMart626/djcms_blog/python-3-shield.svg
 
-.. image:: https://pyup.io/repos/github/CarlosMart626/djcms_blog/shield.svg?t=1528243878487
+.. image:: https://pyup.io/repos/github/CarlosMart626/djcms_blog/shield.svg
 
 
 
