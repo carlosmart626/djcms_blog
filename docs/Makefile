@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = python -msphinx
-SPHINXPROJ    = dj_blog
+SPHINXPROJ    = djcms_blog
 SOURCEDIR     = .
 BUILDDIR      = _build
 

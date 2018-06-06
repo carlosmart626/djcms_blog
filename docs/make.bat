@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=dj_blog
+set SPHINXPROJ=djcms_blog
 
 if "%1" == "" goto help
 

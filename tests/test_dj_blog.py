@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""Tests for `dj_blog` package."""
+"""Tests for `djcms_blog` package."""
 
 import pytest
 
 
-from dj_blog import dj_blog
+from djcms_blog import djcms_blog
 
 
 @pytest.fixture
