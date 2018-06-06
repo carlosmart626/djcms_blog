@@ -14,9 +14,11 @@ Simple Django Blog
         :alt: Documentation Status
 
 .. image:: https://pyup.io/repos/github/CarlosMart626/djcms_blog/python-3-shield.svg?t=1528243878487
+        :target: 
         :alt: Python3
 
 .. image:: https://pyup.io/repos/github/CarlosMart626/djcms_blog/shield.svg?t=1528243878487
+        :target: 
         :alt: pyup
 
 
