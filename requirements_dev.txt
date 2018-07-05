@@ -9,5 +9,5 @@ sphinx-rtd-theme==0.3.1
 twine==1.11.0
 black==18.6b1
 
-pytest==3.6.1
+pytest==3.6.2
 pytest-runner==4.2
