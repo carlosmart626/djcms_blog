@@ -22,7 +22,11 @@
     <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'djcms_blog/css/semantic.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'djcms_blog/css/djcms_blog.css' %}">
-	{% block block_header %}{{ object.blog.block_header }}{% endblock block_header %}
+    {% block block_header %}
+        {% autoescape off %}
+            {{ object.blog.block_header }}
+        {% endautoescape %}
+    {% endblock block_header %}
     {% markdown_code_css 'dracula' %}
     <style>
         .ui.primary.inverted.segment {
@@ -169,8 +173,14 @@
             });
     </script>
     {% endif %}
-	{% block extra_js %}{% endblock %}
-	{% block block_footer %}{{ object.blog.block_footer }}{% endblock block_footer %}
+    {% block extra_js %}{% endblock %}
+     
+    {% block block_footer %}
+        {% autoescape off %}
+            {{ object.blog.block_footer }}
+        {% endautoescape %}
+    {% endblock block_footer %}
+     
 </body>
 
 </html>
