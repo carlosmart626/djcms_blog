@@ -477,6 +477,9 @@ hr {
 }
 
 @media only screen and (max-width: 700px) {
+    html {
+        font-size: 12px;
+    }
     .blog-masterhead {
         display: flex !important;
         flex-direction: column;
@@ -499,5 +502,21 @@ hr {
         flex-direction: column;
         margin: auto;
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+    .blog-content{
+        padding: 10% 5% 0 5%;
+        font-size: 14px;
+    }
+}
+@media only screen and (max-width: 450px) {
+    .blog-content{
+        padding: 10% 2% 5% 2%;
+        font-size: 14px;
+    }
+    .blog-content code{
+        font-size: 10px;
+    }
+    .blog-content pre{
+        font-size: 10px;
     }
 }
