@@ -21,7 +21,7 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'djcms_blog/css/djcms_blog.css' %}">
     {% comment %} <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1"
         crossorigin="anonymous"> {% endcomment %}
-	{% block block_header %}{{ object.block_header }}{% endblock block_header %}
+    {% block block_header %} {% autoescape off %} {{ object.block_header }} {% endautoescape %} {% endblock block_header %}
     {% comment %} {% markdown_code_css 'dracula' %} {% endcomment %}
     <style>
         .ui.primary.inverted.segment {
@@ -146,7 +146,7 @@
 	</script>
 	
 	{% block extra_js %}{% endblock %}
-	{% block block_footer %}{{ object.block_footer }}{% endblock block_footer %}
+    {% block block_footer %} {% autoescape off %} {{ object.block_footer }} {% endautoescape %} {% endblock block_footer %}
 </body>
 
 </html>
