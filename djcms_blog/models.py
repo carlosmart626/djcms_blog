@@ -266,7 +266,7 @@ class PostTitle(models.Model):
         unique_together = ("post", "language", "publisher_is_draft")
 
     def get_absolute_url(self):
-        from django.urls import reverse
+        from django.core.urlresolvers import reverse
         return reverse('post-detail', kwargs={'blog_slug': self.post.blog.slug, 'post_slug': self.post.slug})
 
     def edited(self):
