@@ -265,9 +265,9 @@ class PostTitle(models.Model):
     class Meta:
         unique_together = ("post", "language", "publisher_is_draft")
 
-    def save(self, *args, **kwargs):
-        print("Values to save", args, kwargs)
-        super(PostTitle, self).save(*args, **kwargs)
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('post-detail', kwargs={'blog_slug': self.post.blog.slug, 'post_slug': self.post.slug})
 
     def edited(self):
         if self.publisher_public:

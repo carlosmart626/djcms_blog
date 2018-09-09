@@ -15,6 +15,7 @@ with open("HISTORY.rst") as history_file:
 requirements = [
     "django-simplemde==0.1.2",
     "dj_markdown==0.1.2",
+    "django"
 ]
 
 setup_requirements = ["pytest-runner"]
