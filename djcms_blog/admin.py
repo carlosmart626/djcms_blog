@@ -1,11 +1,10 @@
-from django.contrib import admin
-from django.core.urlresolvers import reverse
-from django.contrib import messages
 from django.conf import settings
+from django.contrib import admin
+from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.utils.translation import gettext_lazy as _
 
 from .models import Author, AuthorBio, Blog, BlogTitle, Post, PostTitle, Tag, TagTitle
-
 
 add_string = _("Add")
 view_string = _("View")
@@ -33,7 +32,7 @@ make_unpublished.short_description = "Unpublish selected posts"
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ["title", "is_published", "blog"]
-    filter_horizontal = ("tag",)
+    filter_horizontal = ("tags",)
     prepopulated_fields = {"slug": ("title",)}
 
     def is_published(self, obj):
@@ -96,7 +95,7 @@ class PostTitleAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super(PostTitleAdmin, self).get_queryset(request)
-        return qs.filter(publisher_is_draft=True)
+        return qs.filter(is_draft=True)
 
 
 class BlogAdmin(admin.ModelAdmin):

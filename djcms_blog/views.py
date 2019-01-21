@@ -1,8 +1,8 @@
-from django.views.generic import DetailView
-from django.utils.translation import gettext as _
-from django.conf import settings
 from django.http import Http404
+from django.utils.translation import gettext as _
+from django.views.generic import DetailView
 
+from djcms_blog import settings
 from .models import Author, Blog, Tag, Post
 
 
@@ -25,6 +25,7 @@ class BlogView(BlogDetailView):
     slug_field = "slug"
     slug_url_kwarg = "blog_slug"
     model = Blog
+    object = None
 
     def get_context_data(self, **kwargs):
         context = super(BlogView, self).get_context_data(**kwargs)
@@ -52,6 +53,7 @@ class TagView(BlogDetailView):
     slug_field = "slug"
     slug_url_kwarg = "tag_slug"
     model = Tag
+    object = None
 
     def get_context_data(self, **kwargs):
         context = super(TagView, self).get_context_data(**kwargs)
@@ -64,6 +66,7 @@ class TagView(BlogDetailView):
         self.object.description = lang_object.description
         self.object.meta_title = lang_object.meta_title
         self.object.meta_description = lang_object.meta_description
+        self.object.cover_image = self.object.cover.url if self.object.cover else settings.DEFAULT_COVER_IMAGE
         self.object.get_posts = self.object.get_posts()
         for post in self.object.get_posts:
             post_object = post.language_object(self.language)
@@ -79,6 +82,7 @@ class AutorView(BlogDetailView):
     slug_field = "slug"
     slug_url_kwarg = "author_slug"
     model = Author
+    object = None
 
     def get_context_data(self, **kwargs):
         context = super(AutorView, self).get_context_data(**kwargs)
@@ -89,6 +93,7 @@ class AutorView(BlogDetailView):
         self.object = self.get_object()
         lang_object = self.object.get_language_object(self.language)
         self.object.bio = lang_object.bio
+        self.object.cover_image = self.object.cover.url if self.object.cover else settings.DEFAULT_COVER_IMAGE
         self.object.get_posts = self.object.get_posts()
         for post in self.object.get_posts:
             post.title = post.language_object(self.language).title
@@ -103,6 +108,7 @@ class PostView(BlogDetailView):
     slug_field = "slug"
     slug_url_kwarg = "post_slug"
     model = Post
+    object = None
 
     def get_context_data(self, **kwargs):
         context = super(PostView, self).get_context_data(**kwargs)
@@ -120,10 +126,11 @@ class PostView(BlogDetailView):
         self.object.body = lang_object.body
         self.object.publisher_public = lang_object.publisher_public
         self.object.published = lang_object.published
-        self.object.publisher_draft = lang_object.publisher_draft
+        self.object.public_post_title = lang_object.public_post_title
         self.object.published_date = lang_object.published_date
         self.object.meta_title = lang_object.meta_title
         self.object.meta_description = lang_object.meta_description
+        self.object.cover_image = self.object.cover.url if self.object.cover else settings.DEFAULT_COVER_IMAGE
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
@@ -141,7 +148,7 @@ class PostDraftView(PostView):
 
         if slug is not None and (pk is None or self.query_pk_and_slug):
             slug_field = self.get_slug_field()
-            queryset = queryset.filter(**{slug_field: slug, "publisher_is_draft": True})
+            queryset = queryset.filter(**{slug_field: slug, "is_draft": True})
 
         if pk is None and slug is None:
             raise AttributeError(

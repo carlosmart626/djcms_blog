@@ -1,4 +1,4 @@
-{% load cms_tags menu_tags sekizai_tags %}{% load static from staticfiles %}
+{% load static from staticfiles %}
 {% load dj_markdownify %}
 {% load djcms_blog %}
 <!DOCTYPE html>
@@ -14,14 +14,14 @@
     <meta name="keywords" content="{{ object.meta_title }}">
 
 	<!-- Site Properities -->
-	<title>Carlos Martínez {% block title %}{% endblock %}</title>
+	<title>{% blog_title %}{% block title %}{% endblock %}</title>
 	<link href="https://fonts.googleapis.com/css?family=Lato|Nanum+Pen+Script" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'djcms_blog/css/semantic.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'djcms_blog/css/djcms_blog.css' %}">
     {% block block_header %} {% autoescape off %} {{ object.block_header }} {% endautoescape %} {% endblock block_header %}
-    {% markdown_code_css 'dracula' %}
+    {% markdown_code_css blog_markdown_code_css_theme %}
     <style>
         .ui.primary.inverted.segment {
             {% if object.cover %}
@@ -41,8 +41,6 @@
 </head>
 
 <body id="top">
-	{% cms_toolbar %}
-
 	<div class="pusher">
 		<div class="ui inverted primary vertical masthead center aligned segment">
 
@@ -51,8 +49,8 @@
 					<a class="toc item">
 						<i class="sidebar icon"></i>
 					</a>
-					<a href="/" class="item">Carlosmart.co</a>
-                    {% block navigation %} {% placeholder "navigation" %} {% endblock navigation %}
+					<a href="{% blog_root_url %}" class="item">{% blog_root_title %}</a>
+                    {% block navigation %}{% endblock navigation %}
                     <div class="right item">
                         <a class="ui black button" href="{% blog_url %}">Blog</a>
                     </div>
@@ -67,10 +65,10 @@
 		<!-- <div class="ui borderless main menu always-top"> -->
 		<div class="ui borderless top fixed menu transition hidden secondary-nav">
 			<div class="ui container">
-				<a href="/" class="header item">
-					<img class="ui circular image logo" src="{% static 'img/carlosmart.png'%}"> Carlosmart.co
+				<a href="{% blog_root_url %}" class="header item">
+					<img class="ui circular image logo" src="{% blog_navbar_image %}"> {% blog_root_title %}
 				</a>
-				{% block nav_navigation %}{% placeholder "nav_navigation" %}{% endblock %}
+				{% block nav_navigation %}{% endblock %}
 			</div>
 		</div>
 		{% include "djcms_blog/blog_actions.html" %}
@@ -81,13 +79,13 @@
 			<div class="ui container">
 				<div class="ui stackable inverted divided equal height stackable grid">
                     <div class="seven wide column">
-                        {% block footer_left %} {% placeholder "footer_left" %} {% endblock footer_left %}
+                        {% block footer_left %}{% endblock footer_left %}
                     </div>
                     <div class="three wide column">
-                        {% block footer_center %} {% placeholder "footer_center" %} {% endblock footer_center %}
+                        {% block footer_center %}{% endblock footer_center %}
                     </div>
                     <div class="three wide column">
-                        {% block footer_right %} {% placeholder "footer_right" %} {% endblock footer_right %}
+                        {% block footer_right %}{% endblock footer_right %}
                     </div>
 				</div>
 			</div>

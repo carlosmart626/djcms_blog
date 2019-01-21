@@ -1,10 +1,9 @@
-from django.db import models
-from django.contrib.auth.models import User
-from simplemde.fields import SimpleMDEField
-from datetime import datetime
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.db import models
 from django.utils import timezone
+from simplemde.fields import SimpleMDEField
 
 from .utils import expire_page
 
@@ -37,6 +36,7 @@ class Author(models.Model):
         return self.user.email
 
     def get_language_object(self, language):
+        # TODO: return default lang fallback
         language_object = AuthorBio.objects.filter(
             author=self, language=language
         ).first()
@@ -68,9 +68,6 @@ class AuthorBio(models.Model):
     def __str__(self):
         return "{} {}".format(self.author, self.language)
 
-    def get_posts(self):
-        return Post.objects.blog_posts(blog=self)
-
 
 class Blog(models.Model):
     title = models.CharField(max_length=140)
@@ -91,6 +88,7 @@ class Blog(models.Model):
         return False
 
     def get_language_object(self, language):
+        # TODO: return default lang fallback
         language_object = BlogTitle.objects.filter(blog=self, language=language).first()
         if language_object:
             return language_object
@@ -152,6 +150,7 @@ class Tag(models.Model):
         return Post.objects.published_tag(tag=self).count()
 
     def get_language_object(self, language):
+        # TODO: return default lang fallback
         language_object = TagTitle.objects.filter(tag=self, language=language).first()
         if language_object:
             return language_object
@@ -177,12 +176,12 @@ class TagTitle(models.Model):
 class PostManager(models.Manager):
     def published(self):
         posts = PostTitle.objects.filter(
-            published=True, publisher_is_draft=False
+            published=True, is_draft=False
         ).values_list("post", flat=True)
         return Post.objects.filter(id__in=posts)
 
     def published_tag(self, tag):
-        return self.published().filter(tag__in=[tag])
+        return self.published().filter(tags__in=[tag])
 
     def blog_posts(self, blog):
         return self.published().filter(blog=blog)
@@ -197,7 +196,7 @@ class Post(models.Model):
     slug = models.CharField(max_length=140)
     cover = models.ImageField(upload_to="post_cover", blank=True, null=True)
     author = models.ForeignKey(Author, db_index=True)
-    tag = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag)
 
     objects = PostManager()
 
@@ -205,21 +204,22 @@ class Post(models.Model):
         return self.title
 
     def get_tags(self):
-        return self.tag.all()
+        return self.tags.all()
 
     def language_object(self, language):
         language_object = PostTitle.objects.filter(
-            post=self, language=language, publisher_is_draft=False, published=True
+            post=self, language=language, is_draft=False, published=True
         ).first()
         if language_object:
             return language_object
         return PostTitle.objects.filter(
-            post=self, publisher_is_draft=False, published=True
+            post=self, is_draft=False, published=True
         ).first()
 
     def get_language_object(self, language):
+        # TODO: return default lang fallback
         language_object = PostTitle.objects.filter(
-            post=self, language=language, publisher_is_draft=True
+            post=self, language=language, is_draft=True
         ).first()
         if language_object:
             return language_object
@@ -231,7 +231,7 @@ class Post(models.Model):
 
     def is_published(self):
         if PostTitle.objects.filter(
-            post=self, publisher_is_draft=False, published=True
+            post=self, is_draft=False, published=True
         ).first():
             return True
         return False
@@ -248,13 +248,13 @@ class PostTitle(models.Model):
     meta_title = SimpleMDEField(max_length=70, blank=True, null=True)
     meta_description = SimpleMDEField(max_length=156, blank=True, null=True)
     published = models.BooleanField(blank=True, default=False)
-    publisher_is_draft = models.BooleanField(
+    is_draft = models.BooleanField(
         default=True, editable=False, db_index=True
     )
-    publisher_public = models.OneToOneField(
+    public_post_title = models.OneToOneField(
         "self",
         on_delete=models.CASCADE,
-        related_name="publisher_draft",
+        related_name="post_draft",
         null=True,
         editable=False,
     )
@@ -263,23 +263,23 @@ class PostTitle(models.Model):
     published_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        unique_together = ("post", "language", "publisher_is_draft")
+        unique_together = ("post", "language", "is_draft")
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
         return reverse('post-detail', kwargs={'blog_slug': self.post.blog.slug, 'post_slug': self.post.slug})
 
     def edited(self):
-        if self.publisher_public:
+        if self.public_post_title:
             if all(
                 (
-                    self.publisher_public.post == self.post,
-                    self.publisher_public.title == self.title,
-                    self.publisher_public.language == self.language,
-                    self.publisher_public.description == self.description,
-                    self.publisher_public.body == self.body,
-                    self.publisher_public.meta_title == self.meta_title,
-                    self.publisher_public.meta_description == self.meta_description,
+                    self.public_post_title.post == self.post,
+                    self.public_post_title.title == self.title,
+                    self.public_post_title.language == self.language,
+                    self.public_post_title.description == self.description,
+                    self.public_post_title.body == self.body,
+                    self.public_post_title.meta_title == self.meta_title,
+                    self.public_post_title.meta_description == self.meta_description,
                 )
             ):
                 return False
@@ -295,35 +295,35 @@ class PostTitle(models.Model):
             body=self.body,
             meta_title=self.meta_title,
             meta_description=self.meta_description,
-            publisher_is_draft=False,
+            is_draft=False,
             published=True,
-            published_date=datetime.now(tz=timezone.utc),
+            published_date=timezone.now(),
         )
         publisher_public.save()
-        self.publisher_public = publisher_public
+        self.public_post_title = publisher_public
         self.published = True
         self.publisher_edited = False
-        self.published_date = datetime.now(tz=timezone.utc)
+        self.published_date = timezone.now()
         self.save()
 
     def publish(self):
-        if self.publisher_public is None:
+        if self.public_post_title is None:
             self.create_public_post()
             expire_blog_post(self)
             return True
         else:
             if self.edited():
-                publisher_public = self.publisher_public
-                self.publisher_public = None
+                publisher_public = self.public_post_title
+                self.public_post_title = None
+                publisher_public.delete()
                 self.create_public_post()
                 expire_blog_post(self)
-                publisher_public.delete()
                 return True
-        return False
+            return False
 
     def unpublish(self):
-        publisher_public = self.publisher_public
-        self.publisher_public = None
+        publisher_public = self.public_post_title
+        self.public_post_title = None
         publisher_public.delete()
         self.published = False
         self.published_date = None
