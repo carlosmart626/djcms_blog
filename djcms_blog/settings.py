@@ -1,6 +1,7 @@
 from django.conf import settings
 
 LANGUAGES = getattr(settings, "LANGUAGES", None)
+LANGUAGE_CODE = getattr(settings, "LANGUAGE_CODE", 'en')
 
 assert LANGUAGES, "django LANGUAGES must be defined in settings.py"
 

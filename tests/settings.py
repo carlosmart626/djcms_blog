@@ -14,6 +14,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.humanize',
 
+    'django.contrib.sitemaps',  # Required!
+    'dj_markdown',  # Required to support markdown
+
     'djcms_blog',
 )
 TEMPLATES = [
@@ -45,6 +48,16 @@ LANGUAGES = [
     ('en', 'English'),
 ]
 
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
 ROOT_URLCONF = 'tests.urls'
 
 DJCMS_BLOG_DEFAULT_URL = "#"
@@ -53,3 +66,4 @@ DJCMS_BLOG_ROOT_TITLE = "MyBlog.com"
 DJCMS_BLOG_ROOT_URL = "/"
 DJCMS_BLOG_MARKDOWN_CODE_CSS_THEME = "dracula"
 SITE_ID = 1
+STATIC_URL = '/static/'

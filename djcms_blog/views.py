@@ -1,6 +1,7 @@
 from django.http import Http404
 from django.utils.translation import gettext as _
 from django.views.generic import DetailView
+from django.utils import translation
 
 from djcms_blog import settings
 from .models import Author, Blog, Tag, Post
@@ -10,14 +11,16 @@ class BlogDetailView(DetailView):
     language = None
 
     def get_language_code(self, url_path=None):
-        default_lang = settings.LANGUAGES[0][0]
-        if url_path is None:
-            return default_lang
+        assert url_path, 'Empty url path'
         lang_code = url_path.split("/")[1]
         return lang_code
 
     def set_language(self):
-        self.language = self.get_language_code(self.request.META["PATH_INFO"])
+        self.language = translation.get_language()
+        if self.language is None:
+            self.language = self.get_language_code(self.request.META["PATH_INFO"])
+        if self.language not in (lang[0] for lang in settings.LANGUAGES):
+            raise Http404
 
 
 class BlogView(BlogDetailView):

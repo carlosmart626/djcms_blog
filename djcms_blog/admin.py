@@ -167,7 +167,7 @@ for lang in settings.LANGUAGES:
         def lang_tag(self, obj):
             lang_object = obj.get_language_object(lang_code)
             if lang_object:
-                return '<a href="/admin/djcms_blog/authorbio/{}/" class="button">{} {}</a>'.format(
+                return '<a href="/admin/djcms_blog/tagtitle/{}/" class="button">{} {}</a>'.format(
                     lang_object.id, view_string, lang_code.upper()
                 )
             return '<a class="button" href="/admin/djcms_blog/tagtitle/add/">{} {}</a>'.format(
@@ -209,22 +209,6 @@ class AuthorAdmin(admin.ModelAdmin):
         return reverse("author-main", kwargs={"author_slug": obj.slug})
 
 
-class AuthorBioAdmin(admin.ModelAdmin):
-    list_display = ["author", "language"]
-
-    def post_count(self, obj):
-        return obj.get_posts().count()
-
-    def view_on_site(self, obj):
-        return reverse("author-main", kwargs={"author_slug": obj.author.slug})
-
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
-
-
 for lang in settings.LANGUAGES:
 
     def get_tag():
@@ -247,6 +231,19 @@ for lang in settings.LANGUAGES:
 
     setattr(AuthorAdmin, lang[0], get_tag())
     AuthorAdmin.list_display.append(lang[0])
+
+
+class AuthorBioAdmin(admin.ModelAdmin):
+    list_display = ["author", "language"]
+
+    def view_on_site(self, obj):
+        return reverse("author-main", kwargs={"author_slug": obj.author.slug})
+
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
 
 
 admin.site.register(Author, AuthorAdmin)

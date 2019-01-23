@@ -223,7 +223,7 @@ class BlogModelsTestCase(TestCase):
         self.assertFalse(other_post_en.edited())
 
     def test_post_title_model(self):
-        self.assertEqual(self.luke_first_post_en.get_absolute_url(), "/my-blog/luke-first-post/")
+        self.assertEqual(self.luke_first_post_en.get_absolute_url(), "/en/my-blog/luke-first-post/")
 
         self.assertFalse(self.luke_first_post_en.edited())
 
