@@ -1,6 +1,8 @@
 {% extends "djcms_blog/base_post.html" %}
+{% load i18n %}
 {% load humanize %}
 {% load dj_markdownify %}
+{% get_current_language as LANGUAGE_CODE %}
 
 {% block title %}
 {{object.title}}
@@ -10,10 +12,10 @@
 {{ object.body | markdown | safe }}
 <div class="ui divider"></div>
 <div class="post post-meta">
-    <a class="post-meta__user" href="/author/{{object.author.slug}}">
+    <a class="post-meta__user" href="/{{ LANGUAGE_CODE }}/author/{{object.author.slug}}">
         <img class="ui avatar image" src="{{object.author.image.url}}">{{post.author.user.username}}</a>
     {% for tag in object.get_tags %}
-    <a href="/{{object.blog.slug}}/tag/{{tag.slug}}/" class="ui {{tag.color}} label">
+    <a href="/{{ LANGUAGE_CODE }}/{{object.blog.slug}}/tag/{{tag.slug}}/" class="ui {{tag.color}} label">
         {{tag.name}}
         <div class="detail">{{tag.get_post_count}}</div>
     </a>

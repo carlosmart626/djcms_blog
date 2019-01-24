@@ -1,10 +1,15 @@
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext as _
 from django.views.generic import DetailView
 from django.utils import translation
 
 from djcms_blog import settings
 from .models import Author, Blog, Tag, Post
+
+
+def change_current_language(request, language_code):
+    translation.activate(language_code)
+    return HttpResponseRedirect(f'/{language_code}/{settings.ROOT_URL}')
 
 
 class BlogDetailView(DetailView):

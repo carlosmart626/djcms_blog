@@ -3,6 +3,7 @@
 {% load djcms_blog %}
 {% load i18n %}
 {% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as languages %}
 <!DOCTYPE html>
 <html>
 
@@ -23,7 +24,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'djcms_blog/css/semantic.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'djcms_blog/css/djcms_blog.css' %}">
     {% block block_header %} {% autoescape off %} {{ object.block_header }} {% endautoescape %} {% endblock block_header %}
-    {% markdown_code_css blog_markdown_code_css_theme %}
+
+    {% autoescape off %}
+        {% markdown_code_css blog_markdown_code_css_theme %}
+    {% endautoescape %}
     <style>
         .ui.primary.inverted.segment {
             {% if object.cover %}
@@ -54,7 +58,11 @@
 					<a href="{% blog_root_url %}" class="item">{% blog_root_title %}</a>
                     {% block navigation %}{% endblock navigation %}
                     <div class="right item">
-                        <a class="ui black button" href="{% blog_url %}">Back home</a>
+                        {% for lang_code, lang_name in languages %}
+                            {% language lang_code %}
+                            <a class="ui black button" href="{% url 'set-language' lang_code %}">{{ lang_name }}</a>
+                            {% endlanguage %}
+                        {% endfor %}
                     </div>
 				</div>
 			</div>

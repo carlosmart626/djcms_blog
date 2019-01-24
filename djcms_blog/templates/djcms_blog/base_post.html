@@ -29,7 +29,9 @@
             {{ object.blog.block_header }}
         {% endautoescape %}
     {% endblock block_header %}
-    {% markdown_code_css 'dracula' %}
+    {% autoescape off %}
+        {% markdown_code_css 'dracula' %}
+    {% endautoescape %}
     <style>
         .ui.primary.inverted.segment {
             {% if object.cover %}
@@ -93,7 +95,7 @@
                 <div class="post-meta__post_time">{{ post.published_date|date:"d M Y" }}</div>
                 {% trans "on" %} 
                 {% for tag in post.get_tags %}
-                <a href="/{{post.blog.slug}}/tag/{{tag.slug}}/">
+                <a href="/{{ LANGUAGE_CODE }}/{{post.blog.slug}}/tag/{{tag.slug}}/">
                     {{tag.name}}
                 </a>
                 {% endfor %}

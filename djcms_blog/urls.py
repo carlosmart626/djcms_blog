@@ -24,6 +24,11 @@ def cache_for_anonim(timeout):
 
 urlpatterns = [
     url(
+        r"^set-language/(?P<language_code>[\w-]+)/$",
+        views.change_current_language,
+        name="set-language",
+    ),
+    url(
         r"^(?P<blog_slug>[\w-]+)/index/$",
         cache_for_anonim(DJCMS_BLOG_CACHE_TIME)(views.BlogView.as_view()),
         name="blog-main",
