@@ -2,6 +2,7 @@ from django import template
 from djcms_blog.models import Blog
 from django.core.urlresolvers import reverse
 from djcms_blog import settings
+from django.utils import translation
 
 register = template.Library()
 
@@ -26,7 +27,9 @@ def get_blog_root_title():
 
 @register.simple_tag(name="blog_root_url")
 def get_blog_root_url():
-    return settings.ROOT_URL
+    current_lang = translation.get_language()
+    root_url = settings.ROOT_URL
+    return f'/{current_lang}/{root_url}'
 
 
 @register.simple_tag(name="blog_navbar_image")

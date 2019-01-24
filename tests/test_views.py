@@ -140,14 +140,51 @@ class BlogAdminTestCase(TestCase):
         response = self.client.get(reverse('blog-main', kwargs={'blog_slug': self.blog.slug}))
         self.assertEqual(response.status_code, 404)
 
-    def test_blog_views(self):
-        response = self.client.get(reverse('blog-main', kwargs={'blog_slug': self.blog.slug}))
-        self.assertEqual(response.status_code, 200)
-
     def test_blog_disabled_i18n_views(self):
         deactivate_all()
         response = self.client.get(reverse('blog-main', kwargs={'blog_slug': self.blog.slug}))
         self.assertEqual(response.status_code, 200)
         self.assertIn("<title>Test Blog\\nMy Blog\\n</title>", str(response._container))
 
+    def test_blog_views(self):
+        response = self.client.get(reverse('blog-main', kwargs={'blog_slug': self.blog.slug}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_tag_view(self):
+        response = self.client.get(
+            reverse('tag-main', kwargs={'blog_slug': self.blog.slug, 'tag_slug': self.django_tag.slug}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_author_views(self):
+        response = self.client.get(
+            reverse('author-main', kwargs={'author_slug': self.author.slug}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_post_views(self):
+        response = self.client.get(
+            reverse('post-detail', kwargs={'blog_slug': self.blog.slug, 'post_slug': self.luke_first_post.slug}))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(
+            reverse('post-detail', kwargs={'blog_slug': self.blog.slug, 'post_slug': 'not-valid'}))
+        self.assertEqual(response.status_code, 404)
+
+        other_post = Post.objects.create(
+            blog=self.blog,
+            title="Other post",
+            slug="other-post",
+            author=self.author
+        )
+        response = self.client.get(
+            reverse('post-detail', kwargs={'blog_slug': self.blog.slug, 'post_slug': other_post.slug}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_post_draft_views(self):
+        response = self.client.get(
+            reverse('draft-post-detail', kwargs={'blog_slug': self.blog.slug, 'post_slug': self.luke_first_post.slug}))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(
+            reverse('draft-post-detail', kwargs={'blog_slug': self.blog.slug, 'post_slug': None}))
+        self.assertEqual(response.status_code, 404)
 

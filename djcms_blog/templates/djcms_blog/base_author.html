@@ -134,8 +134,10 @@
 			.sticky();
 		;
 	</script>
-	{% markdown_code_js %}
-	{% markdown_code_js_init %}
+	{% autoescape off %}
+        {% markdown_code_js %}
+	    {% markdown_code_js_init %}
+    {% endautoescape %}
 	<script>
 		$('.special.cards .image').dimmer({
 			on: 'hover'

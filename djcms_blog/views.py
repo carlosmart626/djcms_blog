@@ -38,6 +38,8 @@ class BlogView(BlogDetailView):
         self.set_language()
         self.object = self.get_object()
         lang_object = self.object.get_language_object(self.language)
+        if lang_object is None:
+            raise Http404
         self.object.description = lang_object.description
         self.object.meta_title = lang_object.meta_title
         self.object.meta_description = lang_object.meta_description
@@ -120,16 +122,15 @@ class PostView(BlogDetailView):
     def get(self, request, *args, **kwargs):
         self.set_language()
         self.object = self.get_object()
-        if not self.object.is_published:
+        if not self.object.is_published():
             raise Http404("Not found")
 
         lang_object = self.object.language_object(self.language)
         self.object.title_id = lang_object.id
         self.object.title = lang_object.title
         self.object.body = lang_object.body
-        self.object.publisher_public = lang_object.publisher_public
-        self.object.published = lang_object.published
         self.object.public_post_title = lang_object.public_post_title
+        self.object.published = lang_object.published
         self.object.published_date = lang_object.published_date
         self.object.meta_title = lang_object.meta_title
         self.object.meta_description = lang_object.meta_description
@@ -144,20 +145,12 @@ class PostDraftView(PostView):
         if queryset is None:
             queryset = self.get_queryset()
 
-        pk = self.kwargs.get(self.pk_url_kwarg)
         slug = self.kwargs.get(self.slug_url_kwarg)
-        if pk is not None:
-            queryset = queryset.filter(pk=pk)
 
-        if slug is not None and (pk is None or self.query_pk_and_slug):
+        if slug is not None:
             slug_field = self.get_slug_field()
-            queryset = queryset.filter(**{slug_field: slug, "is_draft": True})
+            queryset = queryset.filter(**{slug_field: slug})
 
-        if pk is None and slug is None:
-            raise AttributeError(
-                "Generic detail view %s must be called with "
-                "either an object pk or a slug." % self.__class__.__name__
-            )
         try:
             obj = queryset.get()
         except queryset.model.DoesNotExist:

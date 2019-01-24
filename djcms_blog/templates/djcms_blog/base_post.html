@@ -1,8 +1,9 @@
-{% load cms_tags menu_tags sekizai_tags %}{% load static from staticfiles %}
+{% load static from staticfiles %}
 {% load humanize %}
 {% load i18n %}
 {% load dj_markdownify %}
 {% load djcms_blog %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
 <html>
 
@@ -64,10 +65,10 @@
 					<a class="toc item">
 						<i class="sidebar icon"></i>
 					</a>
-					<a href="/" class="item">Carlosmart.co</a>
-                    {% block navigation %} {% placeholder "navigation" %} {% endblock navigation %}
+					<a href="/" class="item">{% blog_root_title %}</a>
+                    {% block navigation %}{% endblock navigation %}
                     <div class="right item">
-                        <a class="ui black button" href="{% blog_url %}">Blog</a>
+                        <a class="ui black button" href="{% blog_url %}">Back home</a>
                     </div>
 				</div>
 			</div>
@@ -80,9 +81,9 @@
 		<div class="ui borderless top fixed menu transition hidden secondary-nav">
 			<div class="ui container">
 				<a href="/" class="header item">
-					<img class="ui circular image logo" src="{% static 'img/carlosmart.png'%}"> Carlosmart.co
+					<img class="ui circular image logo" src="{% blog_navbar_image %}"> {% blog_root_title %}
 				</a>
-				{% block nav_navigation %}{% placeholder "nav_navigation" %}{% endblock %}
+				{% block nav_navigation %}{% endblock %}
 			</div>
         </div>
         {% include "djcms_blog/post_actions.html" %}
@@ -104,13 +105,13 @@
 			<div class="ui container">
 				<div class="ui stackable inverted divided equal height stackable grid">
                     <div class="seven wide column">
-                        {% block footer_left %} {% placeholder "footer_left" %} {% endblock footer_left %}
+                        {% block footer_left %}{% endblock footer_left %}
                     </div>
                     <div class="three wide column">
-                        {% block footer_center %} {% placeholder "footer_center" %} {% endblock footer_center %}
+                        {% block footer_center %}{% endblock footer_center %}
                     </div>
                     <div class="three wide column">
-                        {% block footer_right %} {% placeholder "footer_right" %} {% endblock footer_right %}
+                        {% block footer_right %}{% endblock footer_right %}
                     </div>
 				</div>
 			</div>
@@ -156,8 +157,10 @@
 			.sticky();
 		;
 	</script>
-	{% markdown_code_js %}
-	{% markdown_code_js_init %}
+	{% autoescape off %}
+        {% markdown_code_js %}
+	    {% markdown_code_js_init %}
+    {% endautoescape %}
 	<script>
 		$('.special.cards .image').dimmer({
 			on: 'hover'

@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils import timezone
 from simplemde.fields import SimpleMDEField
+from django.conf import settings
 
 from .utils import expire_page
 
@@ -88,10 +89,10 @@ class Blog(models.Model):
         return False
 
     def get_language_object(self, language):
-        # TODO: return default lang fallback
         language_object = BlogTitle.objects.filter(blog=self, language=language).first()
-        if language_object:
-            return language_object
+        if language_object is None:
+            language_object = BlogTitle.objects.filter(blog=self, language=settings.LANGUAGE_CODE).first()
+        return language_object
 
 
 class BlogTitle(models.Model):
