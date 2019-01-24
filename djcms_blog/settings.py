@@ -1,9 +1,10 @@
 from django.conf import settings
 
 LANGUAGES = getattr(settings, "LANGUAGES", None)
-LANGUAGE_CODE = getattr(settings, "LANGUAGE_CODE", 'en')
+LANGUAGE_CODE = getattr(settings, "LANGUAGE_CODE", None)
 
 assert LANGUAGES, "django LANGUAGES must be defined in settings.py"
+assert LANGUAGE_CODE, "django LANGUAGE_CODE must be defined in settings.py"
 
 DEFAULT_URL = getattr(settings, "DJCMS_BLOG_DEFAULT_URL", "#")
 

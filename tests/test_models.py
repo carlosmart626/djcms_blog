@@ -133,7 +133,7 @@ class BlogModelsTestCase(TestCase):
 
         self.assertEqual(self.blog.get_language_object('en'), self.blog_title_en)
         self.assertEqual(self.blog.get_language_object('es'), self.blog_title_es)
-        self.assertEqual(self.blog.get_language_object('fr'), None)
+        self.assertEqual(self.blog.get_language_object('fr'), self.blog_title_en)
 
         self.assertEqual(str(self.blog_title_en), "My Blog")
         self.assertEqual(str(self.blog_title_es), "Mi Blog")
@@ -149,7 +149,7 @@ class BlogModelsTestCase(TestCase):
 
         self.assertEqual(self.author.get_language_object('en'), self.author_bio_en)
         self.assertEqual(self.author.get_language_object('es'), self.author_bio_es)
-        self.assertEqual(self.author.get_language_object('fr'), None)
+        self.assertEqual(self.author.get_language_object('fr'), self.author_bio_en)
 
         self.assertEqual(str(self.author_bio_en), 'luke_skywalker@gmail.com en')
         self.assertEqual(str(self.author_bio_es), 'luke_skywalker@gmail.com es')
@@ -165,7 +165,7 @@ class BlogModelsTestCase(TestCase):
 
         self.assertEqual(self.django_tag.get_language_object('en'), self.django_tag_en)
         self.assertEqual(self.django_tag.get_language_object('es'), self.django_tag_es)
-        self.assertEqual(self.django_tag.get_language_object('fr'), None)
+        self.assertEqual(self.django_tag.get_language_object('fr'), self.django_tag_en)
 
         self.assertTrue(self.django_tag.has_language('en'))
         self.assertTrue(self.django_tag.has_language('es'))
@@ -185,7 +185,7 @@ class BlogModelsTestCase(TestCase):
 
         self.assertEqual(self.luke_first_post.get_language_object('en'), self.luke_first_post_en)
         self.assertEqual(self.luke_first_post.get_language_object('es'), self.luke_first_post_es)
-        self.assertEqual(self.luke_first_post.get_language_object('fr'), None)
+        self.assertEqual(self.luke_first_post.get_language_object('fr'), self.luke_first_post_en)
 
         # Plubished object
         self.assertEqual(self.luke_first_post.language_object('en'), self.luke_first_post_en.public_post_title)

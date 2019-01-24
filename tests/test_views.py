@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.test import TestCase
-from django.utils import timezone
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import activate, deactivate_all
 
 from djcms_blog.models import Blog, BlogTitle, Author, AuthorBio, Post, PostTitle, Tag, TagTitle
@@ -187,4 +187,3 @@ class BlogAdminTestCase(TestCase):
         response = self.client.get(
             reverse('draft-post-detail', kwargs={'blog_slug': self.blog.slug, 'post_slug': None}))
         self.assertEqual(response.status_code, 404)
-

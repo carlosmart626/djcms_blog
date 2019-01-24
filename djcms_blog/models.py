@@ -4,7 +4,6 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils import timezone
 from simplemde.fields import SimpleMDEField
-from django.conf import settings
 
 from .utils import expire_page
 
@@ -37,12 +36,10 @@ class Author(models.Model):
         return self.user.email
 
     def get_language_object(self, language):
-        # TODO: return default lang fallback
-        language_object = AuthorBio.objects.filter(
-            author=self, language=language
-        ).first()
-        if language_object:
-            return language_object
+        language_object = AuthorBio.objects.filter(author=self, language=language).first()
+        if language_object is None:
+            language_object = AuthorBio.objects.filter(author=self, language=settings.LANGUAGE_CODE).first()
+        return language_object
 
     def has_language(self, language):
         if AuthorBio.objects.filter(author=self, language=language).first():
@@ -151,10 +148,10 @@ class Tag(models.Model):
         return Post.objects.published_tag(tag=self).count()
 
     def get_language_object(self, language):
-        # TODO: return default lang fallback
         language_object = TagTitle.objects.filter(tag=self, language=language).first()
-        if language_object:
-            return language_object
+        if language_object is None:
+            language_object = TagTitle.objects.filter(tag=self, language=settings.LANGUAGE_CODE).first()
+        return language_object
 
 
 class TagTitle(models.Model):
@@ -218,12 +215,11 @@ class Post(models.Model):
         ).first()
 
     def get_language_object(self, language):
-        # TODO: return default lang fallback
-        language_object = PostTitle.objects.filter(
-            post=self, language=language, is_draft=True
-        ).first()
-        if language_object:
-            return language_object
+        language_object = PostTitle.objects.filter(post=self, language=language, is_draft=True).first()
+        if language_object is None:
+            language_object = PostTitle.objects.filter(
+                post=self, language=settings.LANGUAGE_CODE, is_draft=True).first()
+        return language_object
 
     def has_language(self, language):
         if PostTitle.objects.filter(post=self, language=language).first():
