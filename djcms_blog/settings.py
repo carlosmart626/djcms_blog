@@ -13,8 +13,6 @@ BLOG_TITLE = getattr(settings, "DJCMS_BLOG_TITLE", "Django Blog")  # Used in htm
 
 ROOT_TITLE = getattr(settings, "DJCMS_BLOG_ROOT_TITLE", "Django Blog")  # Used in links to home page as string
 
-ROOT_URL = getattr(settings, "DJCMS_BLOG_ROOT_URL", "/")  # Used in links to home page as href
-
 DJCMS_BLOG_CACHE_TIME = getattr(settings, "DJCMS_BLOG_CACHE_TIME", 60 * 60 * 24)
 
 MARKDOWN_CODE_CSS_THEME = getattr(settings, "DJCMS_BLOG_MARKDOWN_CODE_CSS_THEME", 'dracula')

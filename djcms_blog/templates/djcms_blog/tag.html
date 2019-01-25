@@ -1,8 +1,10 @@
 {% extends "djcms_blog/base_blog.html" %}
+{% load djcms_blog %}
 {% load i18n %}
 {% get_available_languages as languages %}
 
 {% block navigation %}
+    <a href="{% url 'blog-main' blog_slug=object.blog.slug %}" class="item">{% blog_root_title %}</a>
     <div class="right item">
         {% for lang_code, lang_name in languages %}
             {% language lang_code %}
@@ -10,6 +12,12 @@
             {% endlanguage %}
         {% endfor %}
     </div>
+{% endblock %}
+
+{% block nav_navigation %}
+<a href="{% url 'blog-main' blog_slug=object.blog.slug %}" class="header item">
+    <img class="ui circular image logo" src="{% blog_navbar_image %}"> {% blog_root_title %}
+</a>
 {% endblock %}
 
 {% block title %}

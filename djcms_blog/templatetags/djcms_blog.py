@@ -26,13 +26,6 @@ def get_blog_root_title():
     return settings.ROOT_TITLE
 
 
-@register.simple_tag(name="blog_root_url")
-def get_blog_root_url():
-    current_lang = translation.get_language()
-    root_url = settings.ROOT_URL
-    return f'/{current_lang}/{root_url}'
-
-
 @register.simple_tag(name="blog_navbar_image")
 def get_blog_navbar_image():
     return settings.DEFAULT_NAVBAR_IMAGE

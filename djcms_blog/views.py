@@ -41,6 +41,7 @@ class BlogView(BlogDetailView):
         lang_object = self.object.get_language_object(self.language)
         if lang_object is None:
             raise Http404
+        self.object.slug = self.object.slug if settings.DEFAULT_BLOG_ID is None else ''
         self.object.description = lang_object.description
         self.object.meta_title = lang_object.meta_title
         self.object.meta_description = lang_object.meta_description
