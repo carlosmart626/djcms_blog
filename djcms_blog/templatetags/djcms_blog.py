@@ -3,7 +3,7 @@ from djcms_blog.models import Blog
 from django.core.urlresolvers import reverse
 from djcms_blog import settings
 from django.utils import translation
-from django.core.urlresolvers import translate_url
+
 
 register = template.Library()
 
@@ -46,9 +46,3 @@ def get_blog_default_cover_image():
 @register.simple_tag(name="blog_markdown_code_css_theme")
 def get_blog_markdown_code_css_theme():
     return settings.MARKDOWN_CODE_CSS_THEME
-
-
-@register.simple_tag(takes_context=True)
-def change_language(context, lang=None, *args, **kwargs):
-    path = context['request'].path
-    return translate_url(path, lang)

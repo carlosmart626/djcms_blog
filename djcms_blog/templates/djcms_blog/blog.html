@@ -1,4 +1,17 @@
 {% extends "djcms_blog/base_blog.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as languages %}
+
+{% block navigation %}
+    <div class="right item">
+        {% for lang_code, lang_name in languages %}
+            {% language lang_code %}
+                <a class="ui black button" href="{% url 'blog-main' blog_slug=object.slug %}">{{ lang_name }}</a>
+            {% endlanguage %}
+        {% endfor %}
+    </div>
+{% endblock %}
 
 {% block title %}
 {{object.title}}

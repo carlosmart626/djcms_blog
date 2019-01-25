@@ -3,6 +3,7 @@ from functools import wraps
 from django.utils.decorators import available_attrs
 from django.views.decorators.cache import cache_page
 from djcms_blog.settings import DJCMS_BLOG_CACHE_TIME
+from djcms_blog import settings
 
 from . import views
 
@@ -21,18 +22,26 @@ def cache_for_anonim(timeout):
 
     return decorator
 
+urlpatterns = []
 
-urlpatterns = [
-    url(
-        r"^set-language/(?P<language_code>[\w-]+)/$",
-        views.change_current_language,
-        name="set-language",
-    ),
-    url(
-        r"^(?P<blog_slug>[\w-]+)/index/$",
-        cache_for_anonim(DJCMS_BLOG_CACHE_TIME)(views.BlogView.as_view()),
-        name="blog-main",
-    ),
+if settings.DEFAULT_BLOG_ID:
+    urlpatterns.append(
+        url(
+            r"^(?P<blog_slug>\w+|)$",
+            cache_for_anonim(DJCMS_BLOG_CACHE_TIME)(views.DefaultBlogView.as_view()),
+            name="blog-main"
+        )
+    )
+else:
+    urlpatterns.append(
+        url(
+            r"^(?P<blog_slug>[\w-]+)/index/$",
+            cache_for_anonim(DJCMS_BLOG_CACHE_TIME)(views.BlogView.as_view()),
+            name="blog-main"
+        )
+    )
+
+urlpatterns += [
     url(
         r"^author/(?P<author_slug>[\w-]+)/$",
         cache_for_anonim(DJCMS_BLOG_CACHE_TIME)(views.AutorView.as_view()),
@@ -54,3 +63,5 @@ urlpatterns = [
         name="draft-post-detail",
     ),
 ]
+
+

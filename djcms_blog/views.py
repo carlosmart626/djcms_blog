@@ -1,15 +1,11 @@
 from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext as _
 from django.views.generic import DetailView
 from django.utils import translation
 
 from djcms_blog import settings
 from .models import Author, Blog, Tag, Post
-
-
-def change_current_language(request, language_code):
-    translation.activate(language_code)
-    return HttpResponseRedirect(f'/{language_code}/{settings.ROOT_URL}')
 
 
 class BlogDetailView(DetailView):
@@ -56,6 +52,13 @@ class BlogView(BlogDetailView):
             post.published_date = post_object.published_date
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
+
+
+class DefaultBlogView(BlogView):
+
+    def get_object(self, queryset=None):
+        blog_id = settings.DEFAULT_BLOG_ID
+        return get_object_or_404(Blog, pk=blog_id)
 
 
 class TagView(BlogDetailView):
@@ -134,7 +137,7 @@ class PostView(BlogDetailView):
         self.object.title_id = lang_object.id
         self.object.title = lang_object.title
         self.object.body = lang_object.body
-        self.object.public_post_title = lang_object.public_post_title
+        self.object.post_draft = lang_object.post_draft
         self.object.published = lang_object.published
         self.object.published_date = lang_object.published_date
         self.object.meta_title = lang_object.meta_title

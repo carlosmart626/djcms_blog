@@ -1,5 +1,17 @@
 {% extends "djcms_blog/base_author.html" %}
 {% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as languages %}
+
+{% block navigation %}
+    <div class="right item">
+        {% for lang_code, lang_name in languages %}
+            {% language lang_code %}
+                <a class="ui black button" href="{% url 'author-main' author_slug=object.slug %}">{{ lang_name }}</a>
+            {% endlanguage %}
+        {% endfor %}
+    </div>
+{% endblock %}
 
 {% block title %}
 {{object.user.first_name}} {{object.user.last_name}}

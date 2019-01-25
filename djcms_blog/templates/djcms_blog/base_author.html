@@ -1,6 +1,9 @@
 {% load static from staticfiles %}
 {% load dj_markdownify %}
 {% load djcms_blog %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as languages %}
 <!DOCTYPE html>
 <html>
 
@@ -55,9 +58,6 @@
 					</a>
 					<a href="{% blog_root_url %}" class="item">{% blog_root_title %}</a>
 					{% block navigation %}{% endblock navigation %}
-                    <div class="right item">
-                        <a class="ui black button" href="{% blog_url %}">Blog</a>
-                    </div>
 				</div>
 			</div>
 			<div class="ui container author-masterhead">

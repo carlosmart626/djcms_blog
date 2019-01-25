@@ -57,13 +57,6 @@
 					</a>
 					<a href="{% blog_root_url %}" class="item">{% blog_root_title %}</a>
                     {% block navigation %}{% endblock navigation %}
-                    <div class="right item">
-                        {% for lang_code, lang_name in languages %}
-                            {% language lang_code %}
-                            <a class="ui black button" href="{% url 'set-language' lang_code %}">{{ lang_name }}</a>
-                            {% endlanguage %}
-                        {% endfor %}
-                    </div>
 				</div>
 			</div>
 			<div class="ui container blog-masterhead">

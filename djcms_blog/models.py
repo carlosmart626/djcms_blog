@@ -210,9 +210,7 @@ class Post(models.Model):
         ).first()
         if language_object:
             return language_object
-        return PostTitle.objects.filter(
-            post=self, is_draft=False, published=True
-        ).first()
+        return PostTitle.objects.filter(post=self, is_draft=False, published=True).first()
 
     def get_language_object(self, language):
         language_object = PostTitle.objects.filter(post=self, language=language, is_draft=True).first()

@@ -2,6 +2,7 @@ from django.conf import settings
 
 LANGUAGES = getattr(settings, "LANGUAGES", None)
 LANGUAGE_CODE = getattr(settings, "LANGUAGE_CODE", None)
+DEFAULT_BLOG_ID = getattr(settings, "DEFAULT_BLOG_ID", None)
 
 assert LANGUAGES, "django LANGUAGES must be defined in settings.py"
 assert LANGUAGE_CODE, "django LANGUAGE_CODE must be defined in settings.py"

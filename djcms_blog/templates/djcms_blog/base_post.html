@@ -4,6 +4,7 @@
 {% load dj_markdownify %}
 {% load djcms_blog %}
 {% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as languages %}
 <!DOCTYPE html>
 <html>
 
@@ -67,11 +68,8 @@
 					<a class="toc item">
 						<i class="sidebar icon"></i>
 					</a>
-					<a href="/" class="item">{% blog_root_title %}</a>
+					<a href="{% blog_root_url %}" class="item">{% blog_root_title %}</a>
                     {% block navigation %}{% endblock navigation %}
-                    <div class="right item">
-                        <a class="ui black button" href="{% blog_url %}">Back home</a>
-                    </div>
 				</div>
 			</div>
 			<div class="ui container post-masterhead">
@@ -82,7 +80,7 @@
 		<!-- <div class="ui borderless main menu always-top"> -->
 		<div class="ui borderless top fixed menu transition hidden secondary-nav">
 			<div class="ui container">
-				<a href="/" class="header item">
+				<a href="{% blog_root_url %}" class="header item">
 					<img class="ui circular image logo" src="{% blog_navbar_image %}"> {% blog_root_title %}
 				</a>
 				{% block nav_navigation %}{% endblock %}
