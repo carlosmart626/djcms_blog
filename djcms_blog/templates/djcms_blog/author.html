@@ -4,10 +4,10 @@
 {% get_available_languages as languages %}
 
 {% block navigation %}
-    <div class="right item">
+    <div class="right menu">
         {% for lang_code, lang_name in languages %}
             {% language lang_code %}
-                <a class="ui black button" href="{% url 'author-main' author_slug=object.slug %}">{{ lang_name }}</a>
+                <a class="ui black button item {% ifequal LANGUAGE_CODE lang_code %}active{% endifequal %}" href="{% url 'author-main' author_slug=object.slug %}">{{ lang_name }}</a>
             {% endlanguage %}
         {% endfor %}
     </div>
@@ -20,7 +20,7 @@
 {% block content %}
 <section class="author-profile">
     <figure class="author-image">
-        <img class="img" src="{{object.image.url}}">
+        <img class="img" src="{{object.profile_img_url}}">
     </figure>
     <div class="author-meta">
         <span class="author-location">

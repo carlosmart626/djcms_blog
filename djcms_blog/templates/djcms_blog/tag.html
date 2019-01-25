@@ -5,10 +5,10 @@
 
 {% block navigation %}
     <a href="{% url 'blog-main' blog_slug=object.blog.slug %}" class="item">{% blog_root_title %}</a>
-    <div class="right item">
+    <div class="right menu">
         {% for lang_code, lang_name in languages %}
             {% language lang_code %}
-            <a class="ui black button" href="{% url 'tag-main' blog_slug=object.blog.slug tag_slug=object.slug %}">{{ lang_name }}</a>
+            <a class="ui black button item {% ifequal LANGUAGE_CODE lang_code %}active{% endifequal %}" href="{% url 'tag-main' blog_slug=object.blog.slug tag_slug=object.slug %}">{{ lang_name }}</a>
             {% endlanguage %}
         {% endfor %}
     </div>

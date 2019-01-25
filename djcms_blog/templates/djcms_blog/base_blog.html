@@ -30,12 +30,9 @@
     {% endautoescape %}
     <style>
         .ui.primary.inverted.segment {
-            {% if object.cover %}
-            background-image: url({{ object.cover.url }}) !important;
-            {% else %}
-            background-image: url({% static 'djcms_blog/img/index-bg.jpg' %}) !important;
-            {% endif %}
-            background-position: 50% 50%;
+            background-image: url({{ object.cover_img_url }}) !important;
+            background-attachment: fixed;
+            background-position: 50% 20%;
         }
 
         .ui.footer.inverted.segment {
@@ -106,13 +103,11 @@
 					.visibility({
 						once: false,
 						onBottomPassed: function () {
-							console.log('this is onBottomPassed');
 							$('.fixed.menu').transition('fade in');
 							$('.fixed.menu').removeClass('hidden');
 							$('.fixed.menu').addClass('visible');
 						},
 						onBottomPassedReverse: function () {
-							console.log('this is onBottomPassedReverse');
 							$('.fixed.menu').transition('fade out');
 							$('.fixed.menu').addClass('hidden');
 							$('.fixed.menu').removeClass('visible');

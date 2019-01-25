@@ -35,11 +35,7 @@
     {% endautoescape %}
     <style>
         .ui.primary.inverted.segment {
-            {% if object.cover %}
-            background-image: url({{ object.cover.url }}) !important;
-            {% else %}
-            background-image: url({{ object.blog.cover.url }}) !important;
-            {% endif %}
+            background-image: url({{ object.cover_img_url }}) !important;
             background-attachment: fixed;
             background-position: 50% 20%;
         }
@@ -130,13 +126,11 @@
 					.visibility({
 						once: false,
 						onBottomPassed: function () {
-							console.log('this is onBottomPassed');
 							$('.fixed.menu').transition('fade in');
 							$('.fixed.menu').removeClass('hidden');
                             $('.fixed.menu').addClass('visible');
 						},
 						onBottomPassedReverse: function () {
-							console.log('this is onBottomPassedReverse');
 							$('.fixed.menu').transition('fade out');
 							$('.fixed.menu').addClass('hidden');
                             $('.fixed.menu').removeClass('visible');

@@ -10,7 +10,7 @@
     <p class="post-description">{{post.description}}</p>
     <div class="post-meta">
         <a class="post-meta__user" href="/{{ LANGUAGE_CODE }}/author/{{post.author.slug}}">
-            <img class="ui avatar image" src="{{post.author.image.url}}">{{post.author.user.username}}</a>
+            <img class="ui avatar image" src="{{post.author.profile_img_url}}">{{post.author.user.username}}</a>
         {% for tag in post.get_tags %}
         <a href="/{{ LANGUAGE_CODE }}/{{post.blog.slug}}/tag/{{tag.slug}}/" class="ui {{tag.color}} label">
             {{tag.name}}

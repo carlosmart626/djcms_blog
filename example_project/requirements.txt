@@ -1,0 +1,4 @@
+Django==1.11.18
+django-simplemde==0.1.2
+dj-markdown==0.1.2
+djcms_blog

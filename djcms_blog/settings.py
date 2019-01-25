@@ -28,5 +28,11 @@ DEFAULT_COVER_IMAGE = getattr(
 DEFAULT_NAVBAR_IMAGE = getattr(
     settings,
     "DJCMS_BLOG_NAVBAR_IMAGE",
-    f"{STATIC_URL}djcms_blog/img/defalt_navicon.jpg"
+    f"{STATIC_URL}djcms_blog/img/default-blog-navicon.jpg"
+)  # Used in navbar
+
+DEFAULT_USER_PROFILE_IMAGE = getattr(
+    settings,
+    "DEFAULT_USER_PROFILE_IMAGE",
+    f"{STATIC_URL}djcms_blog/img/default-blog-user-profile.jpg"
 )  # Used in navbar

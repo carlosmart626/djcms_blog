@@ -6,10 +6,10 @@
 {% get_available_languages as languages %}
 
 {% block navigation %}
-    <div class="right item">
+    <div class="right menu">
         {% for lang_code, lang_name in languages %}
             {% language lang_code %}
-                <a class="ui black button" href="{% url 'post-detail' blog_slug=object.blog.slug post_slug=object.slug %}">{{ lang_name }}</a>
+                <a class="ui black button item {% ifequal LANGUAGE_CODE lang_code %}active{% endifequal %}" href="{% url 'post-detail' blog_slug=object.blog.slug post_slug=object.slug %}">{{ lang_name }}</a>
             {% endlanguage %}
         {% endfor %}
     </div>
@@ -24,7 +24,7 @@
 <div class="ui divider"></div>
 <div class="post post-meta">
     <a class="post-meta__user" href="/{{ LANGUAGE_CODE }}/author/{{object.author.slug}}">
-        <img class="ui avatar image" src="{{object.author.image.url}}">{{post.author.user.username}}</a>
+        <img class="ui avatar image" src="{{object.author.profile_img_url}}">{{post.author.user.username}}</a>
     {% for tag in object.get_tags %}
     <a href="/{{ LANGUAGE_CODE }}/{{object.blog.slug}}/tag/{{tag.slug}}/" class="ui {{tag.color}} label">
         {{tag.name}}

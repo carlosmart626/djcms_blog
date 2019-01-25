@@ -5,6 +5,7 @@ from django.db import models
 from django.utils import timezone
 from simplemde.fields import SimpleMDEField
 
+from .settings import DEFAULT_COVER_IMAGE, DEFAULT_USER_PROFILE_IMAGE
 from .utils import expire_page
 
 
@@ -20,10 +21,30 @@ def expire_blog_post(post):
     expire_page(author_url)
 
 
-class Author(models.Model):
+class CoverImageMixin:
+    cover = None
+
+    @property
+    def cover_img_url(self):
+        if self.cover:
+            return self.cover.url
+        return DEFAULT_COVER_IMAGE
+
+
+class ProfileImageMixin:
+    profile_image = None
+
+    @property
+    def profile_img_url(self):
+        if self.profile_image:
+            return self.profile_image.url
+        return DEFAULT_USER_PROFILE_IMAGE
+
+
+class Author(models.Model, CoverImageMixin, ProfileImageMixin):
     user = models.OneToOneField(User, related_name="author_profile")
-    cover = models.ImageField(upload_to="author_cover")
-    image = models.ImageField(upload_to="image")
+    cover = models.ImageField(upload_to="author_cover", blank=True, null=True)
+    profile_image = models.ImageField(upload_to="image", blank=True, null=True)
     slug = models.CharField(max_length=140)
     location = models.CharField(max_length=100)
     website = models.URLField(max_length=100)
@@ -67,10 +88,10 @@ class AuthorBio(models.Model):
         return "{} {}".format(self.author, self.language)
 
 
-class Blog(models.Model):
+class Blog(models.Model, CoverImageMixin):
     title = models.CharField(max_length=140)
     slug = models.CharField(max_length=140, db_index=True)
-    cover = models.ImageField(upload_to="blog_cover")
+    cover = models.ImageField(upload_to="blog_cover", blank=True, null=True)
     block_header = SimpleMDEField(max_length=10000, blank=True, null=True)
     block_footer = SimpleMDEField(max_length=10000, blank=True, null=True)
 
@@ -109,7 +130,7 @@ class BlogTitle(models.Model):
         return self.title
 
 
-class Tag(models.Model):
+class Tag(models.Model, CoverImageMixin):
     COLOR_CHOICES = (
         ("red", "red"),
         ("orange", "orange"),
@@ -126,7 +147,7 @@ class Tag(models.Model):
         ("black", "black"),
     )
     blog = models.ForeignKey(Blog, db_index=True)
-    cover = models.ImageField(upload_to="tag_cover")
+    cover = models.ImageField(upload_to="tag_cover", blank=True, null=True)
     name = models.CharField(max_length=140)
     slug = models.CharField(max_length=140)
     color = models.CharField(max_length=14, choices=COLOR_CHOICES)
@@ -188,7 +209,7 @@ class PostManager(models.Manager):
         return self.published().filter(author=author)
 
 
-class Post(models.Model):
+class Post(models.Model, CoverImageMixin):
     blog = models.ForeignKey(Blog, db_index=True)
     title = models.CharField(max_length=255)
     slug = models.CharField(max_length=140)
