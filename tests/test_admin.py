@@ -56,7 +56,7 @@ class BlogAdminTestCase(TestCase):
         self.author = Author.objects.create(
             user=self.default_user,
             cover="/this/is/cover.png",
-            image="/this/is/profile.png",
+            profile_image="/this/is/profile.png",
             slug='luke-skywalker',
             location='Tatooine',
             website='http://jedirules.com',
@@ -258,7 +258,7 @@ class BlogAdminTestCase(TestCase):
         other_author = Author.objects.create(
             user=other_user,
             cover="/this/is/cover.png",
-            image="/this/is/profile.png",
+            profile_image="/this/is/profile.png",
             slug='user',
             location='nowhere',
             website='http://user.com',
