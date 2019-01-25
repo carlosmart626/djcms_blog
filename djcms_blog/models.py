@@ -269,7 +269,7 @@ class PostTitle(models.Model):
     )
     public_post_title = models.OneToOneField(
         "self",
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name="post_draft",
         null=True,
         editable=False,

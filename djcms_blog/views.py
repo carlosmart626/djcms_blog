@@ -3,9 +3,23 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext as _
 from django.views.generic import DetailView
 from django.utils import translation
+from django.contrib import messages
 
 from djcms_blog import settings
-from .models import Author, Blog, Tag, Post
+from .models import Author, Blog, Tag, Post, PostTitle
+
+
+def delete_published_posts(request):
+    if request.user.is_superuser:
+        PostTitle.objects.filter(is_draft=False, published=True).delete()
+        draft_posts = PostTitle.objects.filter(is_draft=True, published=True)
+        for post in draft_posts:
+            post.published = False
+            post.save()
+        messages.add_message(request, messages.INFO, 'Posts unpublished.')
+    else:
+        messages.add_message(request, messages.INFO, 'You can\'t unpublish all posts')
+    return HttpResponseRedirect('/admin/djcms_blog/posttitle/')
 
 
 class BlogDetailView(DetailView):

@@ -66,6 +66,7 @@ for lang in settings.LANGUAGES:
 
 
 class PostTitleAdmin(admin.ModelAdmin):
+    change_list_template = "admin/djcms_blog/post_action.html"
     list_display = ("title", "is_edited", "post", "language", "published")
     actions = [make_published, make_unpublished]
     exclude = ("published", "published_date")

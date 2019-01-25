@@ -62,6 +62,11 @@ urlpatterns += [
         views.PostDraftView.as_view(),
         name="draft-post-detail",
     ),
+    url(
+        r'^unpublish-all/$',
+        views.delete_published_posts,
+        name="unpublish-all",
+    ),
 ]
 
 
