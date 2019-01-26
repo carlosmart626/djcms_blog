@@ -76,9 +76,6 @@
 		<!-- <div class="ui borderless main menu always-top"> -->
 		<div class="ui borderless top fixed menu transition hidden secondary-nav">
 			<div class="ui container">
-				<a href="{% url 'blog-main' blog_slug=object.blog.slug %}" class="header item">
-					<img class="ui circular image logo" src="{% blog_navbar_image %}"> {% blog_root_title %}
-				</a>
 				{% block nav_navigation %}{% endblock %}
 			</div>
         </div>
