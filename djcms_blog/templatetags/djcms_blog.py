@@ -28,6 +28,9 @@ def get_blog_root_title():
 
 @register.simple_tag(name="blog_navbar_image")
 def get_blog_navbar_image():
+    blog = Blog.objects.first()
+    if blog and blog.nav_icon:
+        return blog.nav_icon.url
     return settings.DEFAULT_NAVBAR_IMAGE
 
 

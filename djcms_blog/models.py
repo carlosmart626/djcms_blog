@@ -92,6 +92,7 @@ class Blog(models.Model, CoverImageMixin):
     title = models.CharField(max_length=140)
     slug = models.CharField(max_length=140, db_index=True)
     cover = models.ImageField(upload_to="blog_cover", blank=True, null=True)
+    nav_icon = models.ImageField(upload_to="blog_nav_icon", blank=True, null=True)
     block_header = SimpleMDEField(max_length=10000, blank=True, null=True)
     block_footer = SimpleMDEField(max_length=10000, blank=True, null=True)
 

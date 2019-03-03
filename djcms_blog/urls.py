@@ -27,7 +27,7 @@ urlpatterns = []
 if settings.DEFAULT_BLOG_ID:
     urlpatterns.append(
         url(
-            r"^(?P<blog_slug>\w+|)$",
+            r"^(?P<blog_slug>[\w-]+|)$",
             cache_for_anonim(DJCMS_BLOG_CACHE_TIME)(views.DefaultBlogView.as_view()),
             name="blog-main"
         )
