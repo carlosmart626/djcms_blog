@@ -22,7 +22,7 @@ Jinja2==2.10
 MarkupSafe==1.1.0
 mccabe==0.6.1
 mistune==0.8.3
-more-itertools==5.0.0
+more-itertools==8.1.0
 packaging==18.0
 pathtools==0.1.2
 pkginfo==1.5.0.1
