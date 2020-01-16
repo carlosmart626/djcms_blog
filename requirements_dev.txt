@@ -42,7 +42,7 @@ PyYAML==3.13
 readme-renderer==24.0
 requests==2.21.0
 requests-toolbelt==0.9.0
-six==1.12.0
+six==1.14.0
 snowballstemmer==1.2.1
 Sphinx==1.7.8
 sphinx-rtd-theme==0.4.2
