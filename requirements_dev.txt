@@ -36,7 +36,7 @@ pyparsing==2.3.1
 pytest==3.6.2
 pytest-cov==2.5.1
 pytest-django==3.3.2
-pytest-runner==4.2
+pytest-runner==5.3.0
 pytz==2018.9
 PyYAML==3.13
 readme-renderer==24.0
