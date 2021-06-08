@@ -15,7 +15,7 @@ with open("HISTORY.md") as history_file:
 requirements = [
     "django-simplemde==0.1.2",
     "dj_markdown==0.1.2",
-    "Pillow==5.4.1",
+    "Pillow==8.2.0",
     "django"
 ]
 
