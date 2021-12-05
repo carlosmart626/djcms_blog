@@ -21,7 +21,7 @@ imagesize==1.1.0
 Jinja2==2.10
 MarkupSafe==1.1.0
 mccabe==0.6.1
-mistune==0.8.3
+mistune==2.0.0
 more-itertools==5.0.0
 packaging==18.0
 pathtools==0.1.2
