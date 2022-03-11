@@ -39,7 +39,7 @@ pytest-django==3.3.2
 pytest-runner==4.2
 pytz==2018.9
 PyYAML==3.13
-readme-renderer==24.0
+readme-renderer==34.0
 requests==2.21.0
 requests-toolbelt==0.9.0
 six==1.12.0
