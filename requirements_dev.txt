@@ -14,7 +14,7 @@ dj-markdown==0.1.2
 Django==1.11.18
 django-simplemde==0.1.2
 docutils==0.14
-filelock==3.0.10
+filelock==3.9.1
 flake8==3.5.0
 idna==2.8
 imagesize==1.1.0
