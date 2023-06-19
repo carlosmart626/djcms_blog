@@ -26,7 +26,7 @@ more-itertools==5.0.0
 packaging==18.0
 pathtools==0.1.2
 pkginfo==1.5.0.1
-pluggy==0.6.0
+pluggy==1.1.0
 py==1.7.0
 pycodestyle==2.5.0
 pyflakes==1.6.0
