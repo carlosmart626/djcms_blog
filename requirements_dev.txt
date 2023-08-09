@@ -46,7 +46,7 @@ six==1.12.0
 snowballstemmer==1.2.1
 Sphinx==1.7.8
 sphinx-rtd-theme==0.4.2
-sphinxcontrib-websupport==1.1.0
+sphinxcontrib-websupport==1.2.6
 toml==0.10.0
 tox==3.5.2
 tqdm==4.30.0
