@@ -1,4 +1,4 @@
-Django==1.11.23
+Django==5.0.6
 django-simplemde==0.1.2
 dj-markdown==0.1.2
 djcms_blog==0.2.3
