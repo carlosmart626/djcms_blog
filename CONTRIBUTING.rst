@@ -100,7 +100,7 @@ Before you submit a pull request, check that it meets these guidelines:
 1. The pull request should include tests.
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
-   feature to the list in README.rst.
+   feature to the list in README.md.
 3. The pull request should work for Python 3.10, 3.11, 3.12, 3.13 and 3.14 on
    Django 5.2. Check the GitHub Actions run on the pull request and make sure
    that the tests pass for all supported Python versions.
@@ -117,10 +117,14 @@ Deploying
 ---------
 
 A reminder for the maintainers on how to deploy.
-Make sure all your changes are committed (including an entry in HISTORY.rst).
-Then run::
+Make sure all your changes are committed (including an entry in HISTORY.md).
 
-$ bumpversion patch # possible: major / minor / patch
+The version is stored in a single place, ``djcms_blog/__init__.py``, and
+``pyproject.toml`` reads it from there. Bump it by hand, then tag and push::
+
+$ $EDITOR djcms_blog/__init__.py  # bump __version__, e.g. 0.3.0 -> 0.3.1
+$ git commit -am "Bump version to 0.3.1"
+$ git tag v0.3.1
 $ git push
 $ git push --tags
 
