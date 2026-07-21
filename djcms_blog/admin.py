@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib import messages
 from django.urls import reverse
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from .models import Author, AuthorBio, Blog, BlogTitle, Post, PostTitle, Tag, TagTitle
@@ -49,15 +50,16 @@ for lang in settings.LANGUAGES:
         def lang_tag(self, obj):
             lang_object = obj.get_language_object(lang_code)
             if lang_object:
-                return '<a href="/admin/djcms_blog/posttitle/{}/" class="button">{} {}</a>'.format(
+                return format_html(
+                    '<a href="/admin/djcms_blog/posttitle/{}/" class="button">{} {}</a>',
                     lang_object.id, view_string, lang_code.upper()
                 )
-            return '<a class="button" href="/admin/djcms_blog/posttitle/add/">{} {}</a>'.format(
+            return format_html(
+                '<a class="button" href="/admin/djcms_blog/posttitle/add/">{} {}</a>',
                 add_string, lang_code.upper()
             )
 
         lang_tag.short_description = lang_code.upper()
-        lang_tag.allow_tags = True
         lang_tag.__name__ = lang_code
         return lang_tag
 
@@ -118,15 +120,16 @@ for lang in settings.LANGUAGES:
         def lang_tag(self, obj):
             lang_object = obj.get_language_object(lang_code)
             if lang_object:
-                return '<a href="/admin/djcms_blog/blogtitle/{}/" class="button">{} {}</a>'.format(
+                return format_html(
+                    '<a href="/admin/djcms_blog/blogtitle/{}/" class="button">{} {}</a>',
                     lang_object.id, view_string, lang_code.upper()
                 )
-            return '<a class="button" href="/admin/djcms_blog/blogtitle/add/">{} {}</a>'.format(
+            return format_html(
+                '<a class="button" href="/admin/djcms_blog/blogtitle/add/">{} {}</a>',
                 add_string, lang_code.upper()
             )
 
         lang_tag.short_description = lang_code.upper()
-        lang_tag.allow_tags = True
         lang_tag.__name__ = lang_code
         return lang_tag
 
@@ -168,15 +171,16 @@ for lang in settings.LANGUAGES:
         def lang_tag(self, obj):
             lang_object = obj.get_language_object(lang_code)
             if lang_object:
-                return '<a href="/admin/djcms_blog/tagtitle/{}/" class="button">{} {}</a>'.format(
+                return format_html(
+                    '<a href="/admin/djcms_blog/tagtitle/{}/" class="button">{} {}</a>',
                     lang_object.id, view_string, lang_code.upper()
                 )
-            return '<a class="button" href="/admin/djcms_blog/tagtitle/add/">{} {}</a>'.format(
+            return format_html(
+                '<a class="button" href="/admin/djcms_blog/tagtitle/add/">{} {}</a>',
                 add_string, lang_code.upper()
             )
 
         lang_tag.short_description = lang_code.upper()
-        lang_tag.allow_tags = True
         lang_tag.__name__ = lang_code
         return lang_tag
 
@@ -218,15 +222,16 @@ for lang in settings.LANGUAGES:
         def lang_tag(self, obj):
             lang_object = obj.get_language_object(lang_code)
             if lang_object:
-                return '<a href="/admin/djcms_blog/authorbio/{}/" class="button">{} {}</a>'.format(
+                return format_html(
+                    '<a href="/admin/djcms_blog/authorbio/{}/" class="button">{} {}</a>',
                     lang_object.id, view_string, lang_code.upper()
                 )
-            return '<a class="button" href="/admin/djcms_blog/authorbio/add/">{} {}</a>'.format(
+            return format_html(
+                '<a class="button" href="/admin/djcms_blog/authorbio/add/">{} {}</a>',
                 add_string, lang_code.upper()
             )
 
         lang_tag.short_description = lang_code.upper()
-        lang_tag.allow_tags = True
         lang_tag.__name__ = lang_code
         return lang_tag
 
