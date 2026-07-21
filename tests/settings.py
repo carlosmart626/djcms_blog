@@ -16,6 +16,7 @@ INSTALLED_APPS = (
 
     'django.contrib.sitemaps',  # Required!
     'dj_markdown',  # Required to support markdown
+    'easymde',  # Required by the markdown admin widget
 
     'djcms_blog',
 )

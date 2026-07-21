@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
+from django.contrib.staticfiles import finders
 from django.test import TestCase, override_settings
 from django.contrib.admin.sites import AdminSite
 from django.utils import timezone
@@ -313,3 +314,17 @@ class AdminChangelistRenderTestCase(BlogAdminDataMixin, TestCase):
 
     def test_author_changelist_renders_language_buttons(self):
         self.assertLanguageButtonsRendered('/admin/djcms_blog/author/')
+
+    def test_posttitle_add_form_renders_easymde_widget(self):
+        """The EasyMDE widget must render and its assets must be resolvable.
+
+        The widget's media lives inside the ``easymde`` app, so the app has to
+        be in INSTALLED_APPS for the staticfiles finders to locate it.
+        """
+        response = self.client.get('/admin/djcms_blog/posttitle/add/')
+        self.assertEqual(response.status_code, 200)
+        html = response.content.decode()
+        self.assertIn('easymde/easymde.min.js', html)
+        self.assertIn('easymde/easymde.min.css', html)
+        for asset in ('easymde/easymde.min.js', 'easymde/easymde.min.css', 'easymde/easymde.init.js'):
+            self.assertIsNotNone(finders.find(asset), '{} could not be found'.format(asset))
