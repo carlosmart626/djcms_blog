@@ -1,8 +1,7 @@
 from django import template
 from djcms_blog.models import Blog
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from djcms_blog import settings
-from django.utils import translation
 
 
 register = template.Library()
