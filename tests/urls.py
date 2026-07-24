@@ -1,12 +1,17 @@
-from django.conf.urls import include, url
 from django.conf.urls.i18n import i18n_patterns
-
 from django.contrib.sitemaps.views import sitemap
+from django.urls import include, re_path
+
+from djcms_blog.sitemaps import PostsSitemap
+
+sitemaps = {
+    'blog': PostsSitemap,
+}
 
 urlpatterns = [
-    url(r'^sitemap\.xml$', sitemap, name='sitemap-xml'),
+    re_path(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='sitemap-xml'),
 ]
 
 urlpatterns += i18n_patterns(
-    url(r'^', include('djcms_blog.urls')),
+    re_path(r'^', include('djcms_blog.urls')),
 )

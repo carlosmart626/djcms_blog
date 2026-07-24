@@ -68,7 +68,7 @@ Ready to contribute? Here's how to set up `djcms_blog` for local development.
 
     $ mkvirtualenv djcms_blog
     $ cd djcms_blog/
-    $ python setup.py develop
+    $ pip install -e ".[test,lint]"
 
 4. Create a branch for local development::
 
@@ -77,13 +77,12 @@ Ready to contribute? Here's how to set up `djcms_blog` for local development.
    Now you can make your changes locally.
 
 5. When you're done making changes, check that your changes pass flake8 and the
-   tests, including testing other Python versions with tox::
+   tests::
 
     $ flake8 djcms_blog tests
-    $ python setup.py test or py.test
-    $ tox
+    $ pytest
 
-   To get flake8 and tox, just pip install them into your virtualenv.
+   To get flake8, just pip install it into your virtualenv.
 
 6. Commit your changes and push your branch to GitHub::
 
@@ -101,10 +100,10 @@ Before you submit a pull request, check that it meets these guidelines:
 1. The pull request should include tests.
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
-   feature to the list in README.rst.
-3. The pull request should work for Python 2.7, 3.4, 3.5 and 3.6, and for PyPy. Check
-   https://travis-ci.org/carlosmart626/djcms_blog/pull_requests
-   and make sure that the tests pass for all supported Python versions.
+   feature to the list in README.md.
+3. The pull request should work for Python 3.10, 3.11, 3.12, 3.13 and 3.14 on
+   Django 5.2. Check the GitHub Actions run on the pull request and make sure
+   that the tests pass for all supported Python versions.
 
 Tips
 ----
@@ -118,11 +117,16 @@ Deploying
 ---------
 
 A reminder for the maintainers on how to deploy.
-Make sure all your changes are committed (including an entry in HISTORY.rst).
-Then run::
+Make sure all your changes are committed (including an entry in HISTORY.md).
 
-$ bumpversion patch # possible: major / minor / patch
+The version is stored in a single place, ``djcms_blog/__init__.py``, and
+``pyproject.toml`` reads it from there. Bump it by hand, then tag and push::
+
+$ $EDITOR djcms_blog/__init__.py  # bump __version__, e.g. 0.3.0 -> 0.3.1
+$ git commit -am "Bump version to 0.3.1"
+$ git tag v0.3.1
 $ git push
 $ git push --tags
 
-Travis will then deploy to PyPI if tests pass.
+Pushing a ``v*`` tag triggers the release workflow, which publishes to PyPI
+via Trusted Publishing.

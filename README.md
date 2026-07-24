@@ -23,7 +23,7 @@ Add the following apps to your INSTALLED_APPS in `settings.py`
 INSTALLED_APPS += [
     'django.contrib.sitemaps',
     'dj_markdown',
-    'simplemde',
+    'easymde',
     'django.contrib.humanize',
     'djcms_blog',
 ]
@@ -47,6 +47,8 @@ Update your `urls.py` adding blog urls.
 ```
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib.sitemaps.views import sitemap
+from django.contrib import admin
+from django.urls import include, re_path
 from djcms_blog.sitemaps import PostsSitemap
 
 sitemaps = {
@@ -54,12 +56,12 @@ sitemaps = {
 }
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
 ]
 
 urlpatterns += i18n_patterns(
-    url(r'^', include('djcms_blog.urls')),
+    re_path(r'^', include('djcms_blog.urls')),
 )
 ```
 

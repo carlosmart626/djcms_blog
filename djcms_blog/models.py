@@ -1,9 +1,9 @@
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.utils import timezone
-from simplemde.fields import SimpleMDEField
+from easymde.fields import EasyMDEField
 
 from .settings import DEFAULT_COVER_IMAGE, DEFAULT_USER_PROFILE_IMAGE
 from .utils import expire_page
@@ -42,7 +42,9 @@ class ProfileImageMixin:
 
 
 class Author(models.Model, CoverImageMixin, ProfileImageMixin):
-    user = models.OneToOneField(User, related_name="author_profile")
+    user = models.OneToOneField(
+        User, related_name="author_profile", on_delete=models.CASCADE
+    )
     cover = models.ImageField(upload_to="author_cover", blank=True, null=True)
     profile_image = models.ImageField(upload_to="image", blank=True, null=True)
     slug = models.CharField(max_length=140)
@@ -50,8 +52,8 @@ class Author(models.Model, CoverImageMixin, ProfileImageMixin):
     website = models.URLField(max_length=100)
     facebook_profile = models.URLField(max_length=100)
     twitter_profile = models.URLField(max_length=100)
-    block_header = SimpleMDEField(max_length=10000, blank=True, null=True)
-    block_footer = SimpleMDEField(max_length=10000, blank=True, null=True)
+    block_header = EasyMDEField(max_length=10000, blank=True, null=True)
+    block_footer = EasyMDEField(max_length=10000, blank=True, null=True)
 
     def __str__(self):
         return self.user.email
@@ -78,8 +80,8 @@ class Author(models.Model, CoverImageMixin, ProfileImageMixin):
 
 
 class AuthorBio(models.Model):
-    author = models.ForeignKey(Author, db_index=True)
-    bio = SimpleMDEField(max_length=255)
+    author = models.ForeignKey(Author, db_index=True, on_delete=models.CASCADE)
+    bio = EasyMDEField(max_length=255)
     language = models.CharField(
         max_length=15, db_index=True, choices=settings.LANGUAGES
     )
@@ -93,8 +95,8 @@ class Blog(models.Model, CoverImageMixin):
     slug = models.CharField(max_length=140, db_index=True)
     cover = models.ImageField(upload_to="blog_cover", blank=True, null=True)
     nav_icon = models.ImageField(upload_to="blog_nav_icon", blank=True, null=True)
-    block_header = SimpleMDEField(max_length=10000, blank=True, null=True)
-    block_footer = SimpleMDEField(max_length=10000, blank=True, null=True)
+    block_header = EasyMDEField(max_length=10000, blank=True, null=True)
+    block_footer = EasyMDEField(max_length=10000, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -115,14 +117,14 @@ class Blog(models.Model, CoverImageMixin):
 
 
 class BlogTitle(models.Model):
-    blog = models.ForeignKey(Blog, db_index=True)
+    blog = models.ForeignKey(Blog, db_index=True, on_delete=models.CASCADE)
     language = models.CharField(
         max_length=15, db_index=True, choices=settings.LANGUAGES
     )
     title = models.CharField(max_length=140)
-    description = SimpleMDEField(max_length=255)
-    meta_title = SimpleMDEField(max_length=70, blank=True, null=True)
-    meta_description = SimpleMDEField(max_length=156, blank=True, null=True)
+    description = EasyMDEField(max_length=255)
+    meta_title = EasyMDEField(max_length=70, blank=True, null=True)
+    meta_description = EasyMDEField(max_length=156, blank=True, null=True)
 
     class Meta:
         unique_together = ("blog", "language")
@@ -147,13 +149,13 @@ class Tag(models.Model, CoverImageMixin):
         ("grey", "grey"),
         ("black", "black"),
     )
-    blog = models.ForeignKey(Blog, db_index=True)
+    blog = models.ForeignKey(Blog, db_index=True, on_delete=models.CASCADE)
     cover = models.ImageField(upload_to="tag_cover", blank=True, null=True)
     name = models.CharField(max_length=140)
     slug = models.CharField(max_length=140)
     color = models.CharField(max_length=14, choices=COLOR_CHOICES)
-    meta_title = SimpleMDEField(max_length=70, blank=True, null=True)
-    meta_description = SimpleMDEField(max_length=156, blank=True, null=True)
+    meta_title = EasyMDEField(max_length=70, blank=True, null=True)
+    meta_description = EasyMDEField(max_length=156, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -177,14 +179,14 @@ class Tag(models.Model, CoverImageMixin):
 
 
 class TagTitle(models.Model):
-    tag = models.ForeignKey(Tag, db_index=True)
+    tag = models.ForeignKey(Tag, db_index=True, on_delete=models.CASCADE)
     language = models.CharField(
         max_length=15, db_index=True, choices=settings.LANGUAGES
     )
     name = models.CharField(max_length=140)
-    description = SimpleMDEField(max_length=200)
-    meta_title = SimpleMDEField(max_length=70, blank=True, null=True)
-    meta_description = SimpleMDEField(max_length=156, blank=True, null=True)
+    description = EasyMDEField(max_length=200)
+    meta_title = EasyMDEField(max_length=70, blank=True, null=True)
+    meta_description = EasyMDEField(max_length=156, blank=True, null=True)
 
     class Meta:
         unique_together = ("tag", "language")
@@ -211,11 +213,11 @@ class PostManager(models.Manager):
 
 
 class Post(models.Model, CoverImageMixin):
-    blog = models.ForeignKey(Blog, db_index=True)
+    blog = models.ForeignKey(Blog, db_index=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     slug = models.CharField(max_length=140)
     cover = models.ImageField(upload_to="post_cover", blank=True, null=True)
-    author = models.ForeignKey(Author, db_index=True)
+    author = models.ForeignKey(Author, db_index=True, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tag)
 
     objects = PostManager()
@@ -255,15 +257,15 @@ class Post(models.Model, CoverImageMixin):
 
 
 class PostTitle(models.Model):
-    post = models.ForeignKey(Post, db_index=True)
+    post = models.ForeignKey(Post, db_index=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     language = models.CharField(
         max_length=15, db_index=True, choices=settings.LANGUAGES
     )
-    description = SimpleMDEField(max_length=80000)
-    body = SimpleMDEField(max_length=80000)
-    meta_title = SimpleMDEField(max_length=70, blank=True, null=True)
-    meta_description = SimpleMDEField(max_length=156, blank=True, null=True)
+    description = EasyMDEField(max_length=80000)
+    body = EasyMDEField(max_length=80000)
+    meta_title = EasyMDEField(max_length=70, blank=True, null=True)
+    meta_description = EasyMDEField(max_length=156, blank=True, null=True)
     published = models.BooleanField(blank=True, default=False)
     is_draft = models.BooleanField(
         default=True, editable=False, db_index=True
@@ -283,7 +285,7 @@ class PostTitle(models.Model):
         unique_together = ("post", "language", "is_draft")
 
     def get_absolute_url(self):
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
         return reverse('post-detail', kwargs={'blog_slug': self.post.blog.slug, 'post_slug': self.post.slug})
 
     def edited(self):

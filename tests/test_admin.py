@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.contrib.staticfiles import finders
+from django.test import TestCase, override_settings
 from django.contrib.admin.sites import AdminSite
 from django.utils import timezone
 from unittest.mock import MagicMock
@@ -11,7 +12,8 @@ from djcms_blog.admin import PostAdmin, PostTitleAdmin, make_published, make_unp
     TagAdmin, TagTitleAdmin, AuthorAdmin, AuthorBioAdmin
 
 
-class BlogAdminTestCase(TestCase):
+class BlogAdminDataMixin(object):
+    """Builds a small blog fixture shared by the admin test cases."""
 
     def setUp(self):
         self.admin_site = AdminSite()
@@ -141,6 +143,9 @@ class BlogAdminTestCase(TestCase):
             published_date=timezone.now(),
         )
         self.luke_first_post_es.publish()
+
+
+class BlogAdminTestCase(BlogAdminDataMixin, TestCase):
 
     def test_post_admin(self):
         self.assertEqual(self.post_admin.list_display, ['title', 'is_published', 'blog', 'es', 'en'])
@@ -275,3 +280,51 @@ class BlogAdminTestCase(TestCase):
 
         self.assertEqual(self.author_bio_admin.get_model_perms(request), {})
         self.assertEqual(self.author_bio_admin.view_on_site(self.author_bio_en), "/en/author/luke-skywalker/")
+
+
+@override_settings(ROOT_URLCONF='tests.urls_admin')
+class AdminChangelistRenderTestCase(BlogAdminDataMixin, TestCase):
+    """The language buttons must reach the browser as real HTML, not escaped text.
+
+    ``allow_tags`` was removed in Django 2.0, so the callables have to return
+    values marked safe (``format_html``) or the admin escapes the markup.
+    """
+
+    def setUp(self):
+        super().setUp()
+        User.objects.create_superuser('admin', 'admin@example.com', 'password')
+        self.client.login(username='admin', password='password')
+
+    def assertLanguageButtonsRendered(self, url):
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        html = response.content.decode()
+        self.assertNotIn('&lt;a ', html)
+        for language in ('ES', 'EN'):
+            self.assertIn('class="button">View {}</a>'.format(language), html)
+
+    def test_post_changelist_renders_language_buttons(self):
+        self.assertLanguageButtonsRendered('/admin/djcms_blog/post/')
+
+    def test_blog_changelist_renders_language_buttons(self):
+        self.assertLanguageButtonsRendered('/admin/djcms_blog/blog/')
+
+    def test_tag_changelist_renders_language_buttons(self):
+        self.assertLanguageButtonsRendered('/admin/djcms_blog/tag/')
+
+    def test_author_changelist_renders_language_buttons(self):
+        self.assertLanguageButtonsRendered('/admin/djcms_blog/author/')
+
+    def test_posttitle_add_form_renders_easymde_widget(self):
+        """The EasyMDE widget must render and its assets must be resolvable.
+
+        The widget's media lives inside the ``easymde`` app, so the app has to
+        be in INSTALLED_APPS for the staticfiles finders to locate it.
+        """
+        response = self.client.get('/admin/djcms_blog/posttitle/add/')
+        self.assertEqual(response.status_code, 200)
+        html = response.content.decode()
+        self.assertIn('easymde/easymde.min.js', html)
+        self.assertIn('easymde/easymde.min.css', html)
+        for asset in ('easymde/easymde.min.js', 'easymde/easymde.min.css', 'easymde/easymde.init.js'):
+            self.assertIsNotNone(finders.find(asset), '{} could not be found'.format(asset))

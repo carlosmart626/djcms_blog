@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
+import django.db.models.deletion
 from django.db import migrations, models
 from django.conf import settings
-import simplemde.fields
+import easymde.fields
 
 
 class Migration(migrations.Migration):
@@ -32,20 +30,22 @@ class Migration(migrations.Migration):
                 ("twitter_profile", models.URLField(max_length=100)),
                 (
                     "block_header",
-                    simplemde.fields.SimpleMDEField(
+                    easymde.fields.EasyMDEField(
                         max_length=10000, blank=True, null=True
                     ),
                 ),
                 (
                     "block_footer",
-                    simplemde.fields.SimpleMDEField(
+                    easymde.fields.EasyMDEField(
                         max_length=10000, blank=True, null=True
                     ),
                 ),
                 (
                     "user",
                     models.OneToOneField(
-                        related_name="author_profile", to=settings.AUTH_USER_MODEL
+                        related_name="author_profile",
+                        to=settings.AUTH_USER_MODEL,
+                        on_delete=django.db.models.deletion.CASCADE,
                     ),
                 ),
             ],
@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
                         auto_created=True,
                     ),
                 ),
-                ("bio", simplemde.fields.SimpleMDEField(max_length=255)),
+                ("bio", easymde.fields.EasyMDEField(max_length=255)),
                 (
                     "language",
                     models.CharField(
@@ -71,7 +71,10 @@ class Migration(migrations.Migration):
                         choices=[("en", "en"), ("es", "es")],
                     ),
                 ),
-                ("author", models.ForeignKey(to="djcms_blog.Author")),
+                ("author", models.ForeignKey(
+                        to="djcms_blog.Author",
+                        on_delete=django.db.models.deletion.CASCADE,
+                    )),
             ],
         ),
         migrations.CreateModel(
@@ -91,13 +94,13 @@ class Migration(migrations.Migration):
                 ("cover", models.ImageField(upload_to="blog_cover")),
                 (
                     "block_header",
-                    simplemde.fields.SimpleMDEField(
+                    easymde.fields.EasyMDEField(
                         max_length=10000, blank=True, null=True
                     ),
                 ),
                 (
                     "block_footer",
-                    simplemde.fields.SimpleMDEField(
+                    easymde.fields.EasyMDEField(
                         max_length=10000, blank=True, null=True
                     ),
                 ),
@@ -124,20 +127,23 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("title", models.CharField(max_length=140)),
-                ("description", simplemde.fields.SimpleMDEField(max_length=255)),
+                ("description", easymde.fields.EasyMDEField(max_length=255)),
                 (
                     "meta_title",
-                    simplemde.fields.SimpleMDEField(
+                    easymde.fields.EasyMDEField(
                         max_length=70, blank=True, null=True
                     ),
                 ),
                 (
                     "meta_description",
-                    simplemde.fields.SimpleMDEField(
+                    easymde.fields.EasyMDEField(
                         max_length=156, blank=True, null=True
                     ),
                 ),
-                ("blog", models.ForeignKey(to="djcms_blog.Blog")),
+                ("blog", models.ForeignKey(
+                        to="djcms_blog.Blog",
+                        on_delete=django.db.models.deletion.CASCADE,
+                    )),
             ],
         ),
         migrations.CreateModel(
@@ -158,8 +164,14 @@ class Migration(migrations.Migration):
                     "cover",
                     models.ImageField(blank=True, null=True, upload_to="post_cover"),
                 ),
-                ("author", models.ForeignKey(to="djcms_blog.Author")),
-                ("blog", models.ForeignKey(to="djcms_blog.Blog")),
+                ("author", models.ForeignKey(
+                        to="djcms_blog.Author",
+                        on_delete=django.db.models.deletion.CASCADE,
+                    )),
+                ("blog", models.ForeignKey(
+                        to="djcms_blog.Blog",
+                        on_delete=django.db.models.deletion.CASCADE,
+                    )),
             ],
         ),
         migrations.CreateModel(
@@ -183,17 +195,17 @@ class Migration(migrations.Migration):
                         choices=[("en", "en"), ("es", "es")],
                     ),
                 ),
-                ("description", simplemde.fields.SimpleMDEField(max_length=80000)),
-                ("body", simplemde.fields.SimpleMDEField(max_length=80000)),
+                ("description", easymde.fields.EasyMDEField(max_length=80000)),
+                ("body", easymde.fields.EasyMDEField(max_length=80000)),
                 (
                     "meta_title",
-                    simplemde.fields.SimpleMDEField(
+                    easymde.fields.EasyMDEField(
                         max_length=70, blank=True, null=True
                     ),
                 ),
                 (
                     "meta_description",
-                    simplemde.fields.SimpleMDEField(
+                    easymde.fields.EasyMDEField(
                         max_length=156, blank=True, null=True
                     ),
                 ),
@@ -205,7 +217,10 @@ class Migration(migrations.Migration):
                 ("created", models.DateTimeField(auto_now_add=True)),
                 ("modified", models.DateTimeField(auto_now=True)),
                 ("published_date", models.DateTimeField(blank=True, null=True)),
-                ("post", models.ForeignKey(to="djcms_blog.Post")),
+                ("post", models.ForeignKey(
+                        to="djcms_blog.Post",
+                        on_delete=django.db.models.deletion.CASCADE,
+                    )),
                 (
                     "publisher_public",
                     models.OneToOneField(
@@ -213,6 +228,7 @@ class Migration(migrations.Migration):
                         editable=False,
                         related_name="publisher_draft",
                         to="djcms_blog.PostTitle",
+                        on_delete=django.db.models.deletion.CASCADE,
                     ),
                 ),
             ],
@@ -255,17 +271,20 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "meta_title",
-                    simplemde.fields.SimpleMDEField(
+                    easymde.fields.EasyMDEField(
                         max_length=70, blank=True, null=True
                     ),
                 ),
                 (
                     "meta_description",
-                    simplemde.fields.SimpleMDEField(
+                    easymde.fields.EasyMDEField(
                         max_length=156, blank=True, null=True
                     ),
                 ),
-                ("blog", models.ForeignKey(to="djcms_blog.Blog")),
+                ("blog", models.ForeignKey(
+                        to="djcms_blog.Blog",
+                        on_delete=django.db.models.deletion.CASCADE,
+                    )),
             ],
         ),
         migrations.CreateModel(
@@ -289,20 +308,23 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("name", models.CharField(max_length=140)),
-                ("description", simplemde.fields.SimpleMDEField(max_length=200)),
+                ("description", easymde.fields.EasyMDEField(max_length=200)),
                 (
                     "meta_title",
-                    simplemde.fields.SimpleMDEField(
+                    easymde.fields.EasyMDEField(
                         max_length=70, blank=True, null=True
                     ),
                 ),
                 (
                     "meta_description",
-                    simplemde.fields.SimpleMDEField(
+                    easymde.fields.EasyMDEField(
                         max_length=156, blank=True, null=True
                     ),
                 ),
-                ("tag", models.ForeignKey(to="djcms_blog.Tag")),
+                ("tag", models.ForeignKey(
+                        to="djcms_blog.Tag",
+                        on_delete=django.db.models.deletion.CASCADE,
+                    )),
             ],
         ),
         migrations.AddField(
